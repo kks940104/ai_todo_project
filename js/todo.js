@@ -24,5 +24,37 @@ window.addEventListener("DOMContentLoaded", function () {
   // 양식 태그의 기본 동작 차단
   frmTodo.addEventListener("submit", function (e) {
     e.preventDefault();
+    /**
+     * 1. 필수 항목 검증
+     * 2. 일정 추가
+     */
+    // 1. 필수 항목 검증 S
+    try {
+      const requiredFields = {
+        title: "작업 제목을 입력하세요.",
+        deadline: "마감일을 입력하세요.",
+        discription: "작업 내용을 입력하세요.",
+      };
+
+      for (const [field, message] of Object.entries(requiredFields)) {
+        const value = frmTodo[field].value.trim();
+
+        if (!value) {
+          throw new Error(JSON.stringify({ field, message }));
+        }
+      }
+
+      // 1. 필수 항목 검증 E
+    } catch (err) {
+      const { field, message } = JSON.parse(err.message);
+      const el = document.getElementById(`error-${field}`);
+      console.log(err.message, el);
+      if (el) {
+        el.innerText = message;
+        el.classList.remove("dn");
+        el.focus();
+        console.log(field, message);
+      }
+    }
   });
 });
