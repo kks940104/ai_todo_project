@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <title>나의 할일 목록</title>
     <!--무거운건 뒤에. 스크립트를 뒤에. CSS를 앞에-->
-    .
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css"
@@ -12,5 +11,25 @@
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <script src="js/todo.js"></script>
   </head>
-  <body></body>
+  <body>
+    <h1>나의 할일</h1>
+    <form name="frmTodo" autocomplete="off">
+      <dl>
+        <dt>작업 제목</dt>
+        <dd>
+          <input type="text" name="title" />
+        </dd>
+        <dd>
+          <input type="date" name="deadline" placeholder="마감일" />
+        </dd>
+      </dl>
+      <dl>
+        <dt>작업 내용</dt>
+        <dd>
+          <textarea name="description"> </textarea>
+        </dd>
+      </dl>
+      <button type="submit">일정 등록</button>
+    </form>
+  </body>
 </html>
