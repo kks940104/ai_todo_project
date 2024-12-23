@@ -11,6 +11,7 @@ const todo = {
   add(title, description, deadline) {
     const seq = Date.now();
     this.items.push({ seq, title, description, deadline, done: false });
+    this.save(); // 추가된 작업 저장
     this.render(); // 화면 갱신
   },
   // 작업 삭제
@@ -19,6 +20,8 @@ const todo = {
     const index = this.items.findIndex((item) => item.seq === seq);
     // splice로 해당 순서 번호 항목 제거
     this.items.splice(index, 1);
+    // 작업 목록 저장
+    this.save();
     // 화면 갱신
     this.render();
   },
@@ -46,12 +49,28 @@ const todo = {
       titWrapEl.addEventListener("click", function () {
         todo.accodianView(this.parentElement);
       });
+
+      // 삭제 처리
+      const removeEl = itemEl.querySelector(".remove");
+      removeEl.addEventListener("click", function () {
+        if (confirm("정말 삭제하시겠습니까?")) {
+          const { seq } = this.dataset;
+          todo.remove(seq);
+        }
+      });
     }
   },
   accodianView(el) {
     const items = document.querySelectorAll(".items > .item");
     items.forEach((item) => item.classList.remove("on"));
     el.classList.add("on");
+  },
+  /**
+   * items(할일 목록)을 localStorage로 저장
+   */
+  save() {
+    const data = JSON.stringify(this.items);
+    localStorage.setItem("todos", data);
   },
 };
 
@@ -79,8 +98,8 @@ window.addEventListener("DOMContentLoaded", function () {
 
     const formData = {};
 
-    // 1. 유효성 검사 S
     try {
+      // #region 1. 유효성 검사
       const requiredFields = {
         title: "작업 제목을 입력하세요.",
         deadline: "마감일을 입력하세요.",
@@ -104,19 +123,24 @@ window.addEventListener("DOMContentLoaded", function () {
         formData[field] = value;
       }
 
-      // 1. 유효성 검사 E
+      // #endregion
 
-      // 2. 작업 등록
+      // #region 2. 작업 등록
 
       const { title, deadline, description } = formData;
       todo.add(title, description, deadline);
 
-      // 3. 양식 초기화
+      // #endregion
+
+      // #region 3. 양식 초기화
+
       frmTodo.title.value = "";
       frmTodo.deadline.value = "";
       frmTodo.description.value = "";
 
       frmTodo.title.focus();
+
+      // #endregion
     } catch (err) {
       const { field, message } = JSON.parse(err.message);
       const el = document.getElementById(`error-${field}`);
