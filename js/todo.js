@@ -123,8 +123,8 @@ window.addEventListener("DOMContentLoaded", function () {
 
   // 양식 태그의 기본 동작 차단
   frmTodo.addEventListener("submit", function (e) {
-    e.preventDefault();
     /**
+     e.preventDefault();
      * 0. 검증 실패 메세지 출력화면 초기화
      * 1. 필수 항목 검증
      * 2. 일정 추가
